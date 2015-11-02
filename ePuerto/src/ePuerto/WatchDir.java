@@ -77,8 +77,10 @@ public class WatchDir {
 
     /**
      * Process all events for keys queued to the watcher
+     * @throws IOException 
+     * @throws InterruptedException 
      */
-    void processEvents() {
+    void processEvents() throws IOException, InterruptedException {
         for (;;) {
 
             // wait for key to be signalled
@@ -113,11 +115,25 @@ public class WatchDir {
 
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
+                
+                if (kind == ENTRY_CREATE){
+                	if (dir.getFileName().toString().equals("recepcion")){
+                		Thread.sleep(5000);
+                		Files.copy(child, Paths.get(dir.getParent().toString()+"/confirmar/"+child.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                	}
+                	else if (dir.getFileName().toString().equals("confirmar")) {
+						
+					}
+                	else if (dir.getFileName().toString().equals("anular")) {
+						
+					}
+                }
+                
                 if (recursive && (kind == ENTRY_CREATE)) {
                     try {
                         if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
                             registerAll(child);
-                            
+                            System.out.println(child.toString());
                             //aca hago todo ?? ver como genero confirmacion
                             
                             //recepcion
@@ -149,7 +165,7 @@ public class WatchDir {
         System.exit(-1);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // parse arguments
         if (args.length == 0 || args.length > 2)
             usage();
