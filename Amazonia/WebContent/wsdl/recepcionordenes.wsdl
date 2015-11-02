@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="RecepcionOrdenesService" targetNamespace="http://com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://com/" schemaLocation="recepcionordenes_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="recibirOrdenCompraResponse">
+    <wsdl:part name="parameters" element="tns:recibirOrdenCompraResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="recibirOrdenCompra">
+    <wsdl:part name="parameters" element="tns:recibirOrdenCompra">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RecepcionOrdenes">
+    <wsdl:operation name="recibirOrdenCompra">
+      <wsdl:input name="recibirOrdenCompra" message="tns:recibirOrdenCompra">
+    </wsdl:input>
+      <wsdl:output name="recibirOrdenCompraResponse" message="tns:recibirOrdenCompraResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RecepcionOrdenesServiceSoapBinding" type="tns:RecepcionOrdenes">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="recibirOrdenCompra">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="recibirOrdenCompra">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="recibirOrdenCompraResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RecepcionOrdenesService">
+    <wsdl:port name="RecepcionOrdenesPort" binding="tns:RecepcionOrdenesServiceSoapBinding">
+      <soap:address location="http://localhost:8080/Amazonia/services/RecepcionOrdenesPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -2,6 +2,7 @@ package ws;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -12,7 +13,15 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class Pago {
 	
 	private static long idPago = 1000;
-
+	private static final Logger log = Logger.getLogger(Pago.class.getName() );
+	
+	@Path("hola")
+	@GET
+	public Response saludar(){
+		log.info("SALUDO PagosYa");
+		return Response.status(Status.OK).entity("API REST PagosYa").build();
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response realizarPago(String msj){
@@ -24,6 +33,9 @@ public class Pago {
 		// Parseo la entrada
 		JSONObject solicitud = new JSONObject(msj);	
 		JSONObject salida = new JSONObject();
+		
+		
+		log.info("SOLICITUD PAGO: " + solicitud.toString());
 		
 		try{
 			// nroTarjeta solo numeros de 1000 a 9999
@@ -51,11 +63,13 @@ public class Pago {
 			if ((monto < 0) || (monto > 999999)){
 				salida.put("idPago", "-1");
 				salida.put("mensaje", "ERROR: monto máximo excedido");
+				log.info("ERROR PAGO");
 				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			salida.put("idPago", "-1");
 			salida.put("mensaje", "ERROR: monto no válido");
+			log.info("ERROR PAGO");
 			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
@@ -65,11 +79,13 @@ public class Pago {
 			if ((idCompra < 100000) || (idCompra > 999999)){
 				salida.put("idPago", "-1");
 				salida.put("mensaje", "ERROR: idCompra no permitido");
+				log.info("ERROR PAGO");
 				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			salida.put("idPago", "-1");
 			salida.put("mensaje", "ERROR: idCompra no válido");
+			log.info("ERROR PAGO");
 			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
@@ -81,17 +97,23 @@ public class Pago {
 			if (fechaHora.getYear() > 2015){
 				salida.put("idPago", "-1");
 				salida.put("mensaje", "ERROR: fechaHora mayor a la permitida");
+				log.info("ERROR PAGO");
 				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			salida.put("idPago", "-1");
 			salida.put("mensaje", "ERROR: fechaHora con formato no válido");
+			log.info("ERROR PAGO");
 			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
 		// PARAMETROS CORRECTOS, GENERO NUMERO DE PAGO
-		salida.put("idPago", idPago++);
+		salida.put("idPago", idPago);
 		salida.put("mensaje", "OK");
+		
+		log.info("CONFIRMACION PAGO: Identificador pago " + idPago);
+		
+		idPago++;
 		return Response.status(Status.OK).entity(salida.toString()).build();
 	}
 }

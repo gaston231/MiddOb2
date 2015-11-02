@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><xs:schema xmlns:tns="http://com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0">
+<xs:element name="recibirOrdenCompra" type="tns:recibirOrdenCompra"/>
+<xs:element name="recibirOrdenCompraResponse" type="tns:recibirOrdenCompraResponse"/>
+<xs:complexType name="recibirOrdenCompra">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+      <xs:element name="nroTarjeta" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="productos" type="tns:dataProducto"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="dataProducto">
+    <xs:sequence>
+      <xs:element name="cantidad" type="xs:int"/>
+      <xs:element name="idproducto" type="xs:long"/>
+      <xs:element name="precio" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="recibirOrdenCompraResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

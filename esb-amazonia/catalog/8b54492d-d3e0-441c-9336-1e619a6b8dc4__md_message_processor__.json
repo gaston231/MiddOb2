@@ -1,0 +1,15 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "outboundProperties": {
+            "aa": {
+                "dataType": "UNKNOWN",
+                "metaDataModelPropertiesManager": {
+                    "properties": []
+                }
+            }
+        }
+    },
+    "id": "8b54492d-d3e0-441c-9336-1e619a6b8dc4",
+    "version": "5.2.0.0"
+}
