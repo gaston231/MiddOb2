@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:soap="http://cxf.apache.org/bindings/soap"
+	xmlns:wsa="http://cxf.apache.org/ws/addressing"
+    xmlns:wsp="http://www.w3.org/2006/07/ws-policy"
+    xmlns:policy="http://cxf.apache.org/policy-config"
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans, 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd, 
+	http://cxf.apache.org/bindings/soap,
+	http://cxf.apache.org/schemas/configuration/soap.xsd, 
+	http://cxf.apache.org/jaxws,
+	http://cxf.apache.org/schemas/jaxws.xsd,
+	http://www.w3.org/2006/07/ws-policy,
+	http://www.w3.org/2006/07/ws-policy.xsd,
+	http://cxf.apache.org/ws/addressing,
+	http://cxf.apache.org/schema/ws/addressing.xsd">
+	<jaxws:endpoint xmlns:tns="http://com/" id="recepcionordenes"
+		implementor="com.RecepcionOrdenes" wsdlLocation="wsdl/recepcionordenes.wsdl"
+		endpointName="tns:RecepcionOrdenesPort" serviceName="tns:RecepcionOrdenesService"
+		address="/RecepcionOrdenesPort">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+		</jaxws:features>
+		<jaxws:features>
+            <policy:policies>
+                <wsp:Policy xmlns:wsam="http://www.w3.org/2007/02/addressing/metadata">
+                    <wsam:Addressing>
+                        <wsp:Policy>
+                            <wsam:NonAnonymousResponses/>
+                        </wsp:Policy>
+                    </wsam:Addressing>
+                </wsp:Policy>
+            </policy:policies>
+        </jaxws:features>
+	</jaxws:endpoint>
+</beans>
