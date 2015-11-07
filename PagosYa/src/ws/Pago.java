@@ -16,10 +16,11 @@ public class Pago {
 	private static final Logger log = Logger.getLogger(Pago.class.getName() );
 	
 	@Path("hola")
-	@GET
-	public Response saludar(){
+	@POST
+	public String saludar(String nombre){
 		log.info("SALUDO PagosYa");
-		return Response.status(Status.OK).entity("API REST PagosYa").build();
+		//return Response.status(Status.BAD_REQUEST).entity("API REST PagosYa").build();
+		return "Saludos desde REST PagosYa para "+nombre;
 	}
 	
 	@POST
@@ -32,8 +33,9 @@ public class Pago {
 		
 		// Parseo la entrada
 		JSONObject solicitud = new JSONObject(msj);	
-		JSONObject salida = new JSONObject();
 		
+		JSONObject salida = new JSONObject();
+		JSONObject item = new JSONObject();
 		
 		log.info("SOLICITUD PAGO: " + solicitud.toString());
 		
@@ -41,52 +43,55 @@ public class Pago {
 			// nroTarjeta solo numeros de 1000 a 9999
 			String nroTarjeta = solicitud.getString("nroTarjeta");
 			if (!Pattern.compile("^[0-9]*$").matcher(nroTarjeta).matches()){
-				salida.put("idPago", "-1");
-				salida.put("mensaje", "ERROR: nroTarjeta no válido");
-				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+				item.put("idPago", "-1");
+				item.put("mensaje", "ERROR: nroTarjeta no válido");
+				log.info("ERROR PAGO");
+				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 			}
 			// nroTarjeta valores de 1000 a 9999
-			if ((nroTarjeta.compareTo("1000") < 0) || (nroTarjeta.compareTo("9999") > 0)){
-				salida.put("idPago", "-1");
-				salida.put("mensaje", "ERROR: nroTarjeta no encontrado");
-				return Response.status(Status.NOT_FOUND).entity(salida.toString()).build();
+			if ((Long.valueOf(nroTarjeta) < 1000) || (Long.valueOf(nroTarjeta) > 9999)){
+				item.put("idPago", "-1");
+				item.put("mensaje", "ERROR: nroTarjeta no encontrado");
+				log.info("ERROR PAGO");
+				return Response.status(Status.NOT_FOUND).entity(item.toString()).build();
 			}
 		} catch (Exception e){
-			salida.put("idPago", "-1");
-			salida.put("mensaje", "ERROR: nroTarjeta no válido");
-			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+			item.put("idPago", "-1");
+			item.put("mensaje", "ERROR: nroTarjeta no válido");
+			log.info("ERROR PAGO");
+			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 		}
 		
 		// monto solo numeros de 0 a 999999
 		try{
 			double monto = solicitud.getDouble("monto");
 			if ((monto < 0) || (monto > 999999)){
-				salida.put("idPago", "-1");
-				salida.put("mensaje", "ERROR: monto máximo excedido");
+				item.put("idPago", "-1");
+				item.put("mensaje", "ERROR: monto máximo excedido");
 				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 			}
 		} catch (Exception e){
-			salida.put("idPago", "-1");
-			salida.put("mensaje", "ERROR: monto no válido");
+			item.put("idPago", "-1");
+			item.put("mensaje", "ERROR: monto no válido");
 			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 		}
 		
 		// idCompra solo numeros de 100000 a 999999
 		try{
 			long idCompra = solicitud.getLong("idCompra");
 			if ((idCompra < 100000) || (idCompra > 999999)){
-				salida.put("idPago", "-1");
-				salida.put("mensaje", "ERROR: idCompra no permitido");
+				item.put("idPago", "-1");
+				item.put("mensaje", "ERROR: idCompra no permitido");
 				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 			}
 		} catch (Exception e){
-			salida.put("idPago", "-1");
-			salida.put("mensaje", "ERROR: idCompra no válido");
+			item.put("idPago", "-1");
+			item.put("mensaje", "ERROR: idCompra no válido");
 			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 		}
 		
 		// fechaHora menor a 31/12/2015 23:59
@@ -95,23 +100,24 @@ public class Pago {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 			LocalDate fechaHora = LocalDate.parse(stringHora, formatter);
 			if (fechaHora.getYear() > 2015){
-				salida.put("idPago", "-1");
-				salida.put("mensaje", "ERROR: fechaHora mayor a la permitida");
+				item.put("idPago", "-1");
+				item.put("mensaje", "ERROR: fechaHora mayor a la permitida");
 				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 			}
 		} catch (Exception e){
-			salida.put("idPago", "-1");
-			salida.put("mensaje", "ERROR: fechaHora con formato no válido");
+			item.put("idPago", "-1");
+			item.put("mensaje", "ERROR: fechaHora con formato no válido");
 			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
+			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
 		}
 		
 		// PARAMETROS CORRECTOS, GENERO NUMERO DE PAGO
-		salida.put("idPago", idPago);
-		salida.put("mensaje", "OK");
+		item.put("idPago", idPago);
+		item.put("mensaje", "OK");
 		
-		log.info("CONFIRMACION PAGO: Identificador pago " + idPago);
+		salida.put("PagosYa", item);
+		log.info("CONFIRMACION PAGO: " + salida.toString());
 		
 		idPago++;
 		return Response.status(Status.OK).entity(salida.toString()).build();
