@@ -120,6 +120,6 @@ public class Pago {
 		log.info("CONFIRMACION PAGO: " + salida.toString());
 		
 		idPago++;
-		return Response.status(Status.OK).entity(salida.toString()).build();
+		return Response.status(Status.CREATED).entity(salida.toString()).build();
 	}
 }

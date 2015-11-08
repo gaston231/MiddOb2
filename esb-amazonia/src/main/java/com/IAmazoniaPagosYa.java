@@ -1,9 +1,9 @@
 package com;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.bind.annotation.XmlElement;
 
 @WebService
 public interface IAmazoniaPagosYa {
-	String realizarPago(@WebParam(name = "idCompra") long idCompra, @WebParam(name = "nroTarjeta") String nroTarjeta, @WebParam(name = "monto") double monto, @WebParam(name = "fechaHora") String fechaHora);
+	PagosYaResponse realizarPago(@XmlElement(name = "PagosYaRequest", required = true)PagosYaRequest request);
 }

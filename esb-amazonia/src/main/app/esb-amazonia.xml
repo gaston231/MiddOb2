@@ -8,15 +8,10 @@ xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd">
-<http:listener-config name="listener-config" host="localhost" port="8081" doc:name="HTTP Listener Configuration" basePath="PagosYa"/>
-    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8080" basePath="PagosYa/REST" doc:name="HTTP Request Configuration"/>
+<http:listener-config name="listener-PagosYa-SOAP" host="localhost" port="8081" doc:name="HTTP Listener Configuration" basePath="PagosYa"/>
 <flow name="PagosYaService">
-<http:listener config-ref="listener-config" path="pago" doc:name="HTTP"/>
-<cxf:jaxws-service serviceClass="com.IAmazoniaPagosYa" doc:name="CXF"/>
-<component class="com.AmazoniaPagosYa" doc:name="Java"/>
-        <response>
-            <byte-array-to-string-transformer doc:name="Byte Array to String"/>
-        </response>
-        <http:request config-ref="HTTP_Request_Configuration" path="/pago" method="POST" doc:name="HTTP"/>
+<http:listener config-ref="listener-PagosYa-SOAP" path="pago" doc:name="HTTP"/>
+<cxf:jaxws-service serviceClass="com.IAmazoniaPagosYa" doc:name="SOAP PagosYa"/>
+<component class="com.AmazoniaPagosYa" doc:name="PagosYa REST Call"/>
 </flow>
 </mule>
