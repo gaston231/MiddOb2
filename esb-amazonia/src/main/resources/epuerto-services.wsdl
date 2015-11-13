@@ -1,0 +1,98 @@
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="IAmazoniaEPuertoService" targetNamespace="http://com/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://com/" elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0">
+<xs:element name="confirmarOrden" type="tns:confirmarOrden"/>
+<xs:element name="confirmarOrdenResponse" type="tns:confirmarOrdenResponse"/>
+<xs:element name="recibirPedido" type="tns:recibirPedido"/>
+<xs:element name="recibirPedidoResponse" type="tns:recibirPedidoResponse"/>
+<xs:complexType name="confirmarOrden">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:ePuertoConfirmacionRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoConfirmacionRequest">
+<xs:sequence>
+<xs:element name="codigoResultado" type="xs:int"/>
+<xs:element minOccurs="0" name="descripcion" type="xs:string"/>
+<xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+<xs:element minOccurs="0" name="idReserva" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="confirmarOrdenResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:ePuertoResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="mensaje" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="recibirPedido">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:ePuertoPedidoRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoPedidoRequest">
+<xs:sequence>
+<xs:element name="cantidad" type="xs:int"/>
+<xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+<xs:element name="idProducto" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="recibirPedidoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:ePuertoResponse"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="recibirPedido">
+<wsdl:part element="tns:recibirPedido" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:message name="confirmarOrdenResponse">
+<wsdl:part element="tns:confirmarOrdenResponse" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:message name="confirmarOrden">
+<wsdl:part element="tns:confirmarOrden" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:message name="recibirPedidoResponse">
+<wsdl:part element="tns:recibirPedidoResponse" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:portType name="IAmazoniaEPuerto">
+<wsdl:operation name="confirmarOrden">
+<wsdl:input message="tns:confirmarOrden" name="confirmarOrden"></wsdl:input>
+<wsdl:output message="tns:confirmarOrdenResponse" name="confirmarOrdenResponse"></wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="recibirPedido">
+<wsdl:input message="tns:recibirPedido" name="recibirPedido"></wsdl:input>
+<wsdl:output message="tns:recibirPedidoResponse" name="recibirPedidoResponse"></wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="IAmazoniaEPuertoServiceSoapBinding" type="tns:IAmazoniaEPuerto">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="confirmarOrden">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="confirmarOrden">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="confirmarOrdenResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="recibirPedido">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="recibirPedido">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="recibirPedidoResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="IAmazoniaEPuertoService">
+<wsdl:port binding="tns:IAmazoniaEPuertoServiceSoapBinding" name="IAmazoniaEPuertoPort">
+<soap:address location="http://localhost:9080/soap-esb/EPuerto"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

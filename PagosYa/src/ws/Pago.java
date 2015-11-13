@@ -18,13 +18,13 @@ public class Pago {
 	@Path("hola")
 	@POST
 	public String saludar(String nombre){
-		log.info("SALUDO PagosYa");
+		log.info("SALUDO PagosYa"+nombre);
+		JSONObject solicitud = (new JSONObject(nombre)).getJSONObject("com:realizarPago").getJSONObject("PagosYaRequest");
 		//return Response.status(Status.BAD_REQUEST).entity("API REST PagosYa").build();
-		return "Saludos desde REST PagosYa para "+nombre;
+		return solicitud.toString();
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	public Response realizarPago(String msj){
 		// REALIZAR PAGO EN PAGOSYA
 		// Entrada: JSON con los pagos a realizar
@@ -32,7 +32,7 @@ public class Pago {
 		// Error: Codigos de error utilizados por REST
 		
 		// Parseo la entrada
-		JSONObject solicitud = new JSONObject(msj);	
+		JSONObject solicitud = (new JSONObject(msj)).getJSONObject("com:realizarPago").getJSONObject("PagosYaRequest");	
 		
 		JSONObject salida = new JSONObject();
 		JSONObject item = new JSONObject();
@@ -45,21 +45,24 @@ public class Pago {
 			if (!Pattern.compile("^[0-9]*$").matcher(nroTarjeta).matches()){
 				item.put("idPago", "-1");
 				item.put("mensaje", "ERROR: nroTarjeta no válido");
-				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+				log.info("ERROR PAGO: nroTarjeta no válido");
+				salida.put("PagosYa", item);
+				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 			// nroTarjeta valores de 1000 a 9999
 			if ((Long.valueOf(nroTarjeta) < 1000) || (Long.valueOf(nroTarjeta) > 9999)){
 				item.put("idPago", "-1");
 				item.put("mensaje", "ERROR: nroTarjeta no encontrado");
-				log.info("ERROR PAGO");
-				return Response.status(Status.NOT_FOUND).entity(item.toString()).build();
+				log.info("ERROR PAGO: nroTarjeta no encontrado");
+				salida.put("PagosYa", item);
+				return Response.status(Status.NOT_FOUND).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			item.put("idPago", "-1");
 			item.put("mensaje", "ERROR: nroTarjeta no válido");
-			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+			log.info("ERROR PAGO: nroTarjeta no válido");
+			salida.put("PagosYa", item);
+			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
 		// monto solo numeros de 0 a 999999
@@ -68,14 +71,16 @@ public class Pago {
 			if ((monto < 0) || (monto > 999999)){
 				item.put("idPago", "-1");
 				item.put("mensaje", "ERROR: monto máximo excedido");
-				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+				log.info("ERROR PAGO: monto máximo excedido");
+				salida.put("PagosYa", item);
+				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			item.put("idPago", "-1");
 			item.put("mensaje", "ERROR: monto no válido");
-			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+			log.info("ERROR PAGO: monto no válido");
+			salida.put("PagosYa", item);
+			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
 		// idCompra solo numeros de 100000 a 999999
@@ -84,14 +89,16 @@ public class Pago {
 			if ((idCompra < 100000) || (idCompra > 999999)){
 				item.put("idPago", "-1");
 				item.put("mensaje", "ERROR: idCompra no permitido");
-				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+				log.info("ERROR PAGO: idCompra no permitido");
+				salida.put("PagosYa", item);
+				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			item.put("idPago", "-1");
 			item.put("mensaje", "ERROR: idCompra no válido");
-			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+			log.info("ERROR PAGO: idCompra no válido");
+			salida.put("PagosYa", item);
+			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
 		// fechaHora menor a 31/12/2015 23:59
@@ -102,14 +109,16 @@ public class Pago {
 			if (fechaHora.getYear() > 2015){
 				item.put("idPago", "-1");
 				item.put("mensaje", "ERROR: fechaHora mayor a la permitida");
-				log.info("ERROR PAGO");
-				return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+				log.info("ERROR PAGO: fechaHora mayor a la permitida");
+				salida.put("PagosYa", item);
+				return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 			}
 		} catch (Exception e){
 			item.put("idPago", "-1");
 			item.put("mensaje", "ERROR: fechaHora con formato no válido");
-			log.info("ERROR PAGO");
-			return Response.status(Status.BAD_REQUEST).entity(item.toString()).build();
+			log.info("ERROR PAGO: fechaHora con formato no válido");
+			salida.put("PagosYa", item);
+			return Response.status(Status.BAD_REQUEST).entity(salida.toString()).build();
 		}
 		
 		// PARAMETROS CORRECTOS, GENERO NUMERO DE PAGO

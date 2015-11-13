@@ -1,17 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns="http://www.mulesoft.org/schema/mule/core"
+<mule xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns="http://www.mulesoft.org/schema/mule/core"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:http="http://www.mulesoft.org/schema/mule/http"
 xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
-xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+xsi:schemaLocation="http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd">
-<http:listener-config name="listener-PagosYa-SOAP" host="localhost" port="8081" doc:name="HTTP Listener Configuration" basePath="PagosYa"/>
-<flow name="PagosYaService">
-<http:listener config-ref="listener-PagosYa-SOAP" path="pago" doc:name="HTTP"/>
-<cxf:jaxws-service serviceClass="com.IAmazoniaPagosYa" doc:name="SOAP PagosYa"/>
-<component class="com.AmazoniaPagosYa" doc:name="PagosYa REST Call"/>
-</flow>
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="ESB-SOAP-Listener" host="0.0.0.0" port="8090" basePath="/soap-esb" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8080" basePath="PagosYa/REST" doc:name="HTTP Request Configuration"/>
+    <spring:beans>
+        <spring:bean id="GuardarCSV" name="GuardarCSV" class="com.GuardarCSV"/>
+    </spring:beans>
+    <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="http://localhost:8080/Stock/services/StockPort?wsdl" service="StockService" port="StockPort" serviceAddress="http://localhost:8080/Stock/services/StockPort" doc:name="Web Service Consumer"/>
+    <jms:activemq-connector name="Active_MQ" brokerURL="tcp://localhost:61616" validateConnections="true" doc:name="Active MQ"/>
+    <data-mapper:config name="JSON_To_Xml_AnulacionDeReserva_" transformationGraphPath="json_to_xml_anulaciondereserva_.grf" doc:name="JSON_To_Xml_AnulacionDeReserva_"/>
+    <flow name="PagosYaService">
+        <http:listener config-ref="ESB-SOAP-Listener" path="/PagosYa" doc:name="HTTP"/>
+        <cxf:proxy-service namespace="http://com/" service="IAmazoniaPagosYaService" payload="body" wsdlLocation="src/main/resources/pagos-ya-pago.wsdl" doc:name="CXF"/>
+        <json:xml-to-json-transformer mimeType="text/json" doc:name="XML to JSON"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/pago" method="POST" followRedirects="true" doc:name="HTTP"/>
+        <json:json-to-xml-transformer mimeType="text/xml" doc:name="JSON to XML"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <json:json-to-xml-transformer mimeType="text/xml" doc:name="JSON to XML"/>
+        </catch-exception-strategy>
+    </flow>
+    <flow name="EPuertoService">
+        <http:listener config-ref="ESB-SOAP-Listener" path="/EPuerto" doc:name="HTTP"/>
+        <cxf:proxy-service doc:name="CXF" namespace="http://com/" payload="body" service="IAmazoniaEPuertoService" wsdlLocation="src/main/resources/epuerto-services.wsdl"/>
+        <json:xml-to-json-transformer mimeType="application/json" doc:name="XML to JSON"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.payload.contains('recibirPedido')]">
+                <invoke object-ref="GuardarCSV" method="recibirPedido" methodArguments="#[payload]" doc:name="recibirPedido"/>
+            </when>
+            <when expression="#[message.payload.contains('confirmarOrden')]">
+                <invoke object-ref="GuardarCSV" method="confirmarOrden" methodArguments="#[payload]" doc:name="confirmarOrden"/>
+            </when>
+            <otherwise>
+                <invoke object-ref="GuardarCSV" method="noSoportada" doc:name="noSoportada"/>
+            </otherwise>
+        </choice>
+        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+    </flow>
+    <flow name="StockService">
+        <http:listener config-ref="ESB-SOAP-Listener" path="/Stock" doc:name="HTTP"/>
+        <cxf:proxy-service namespace="http://stock.com/" service="StockService" payload="body" wsdlLocation="http://localhost:8080/Stock/services/StockPort?wsdl" doc:name="CXF"/>
+        <ws:consumer config-ref="Web_Service_Consumer" operation="ReservaDeProductos" doc:name="Web Service Consumer"/>
+    </flow>
+    <flow name="EPuertoCancelacion">
+        <jms:inbound-endpoint topic="CancelacionAmazonia" connector-ref="Active_MQ" doc:name="JMS"/>
+        <expression-filter expression="#[message.payload.contains('anulacionEPuerto')]" doc:name="Expression"/>
+        <invoke object-ref="GuardarCSV" method="cancelarOrden" methodArguments="#[payload]" doc:name="cancelacionOrden"/>
+    </flow>
+    <flow name="StockCancelacion">
+        <jms:inbound-endpoint topic="CancelacionAmazonia" connector-ref="Active_MQ" doc:name="JMS"/>
+        <expression-filter expression="#[message.payload.contains('anulacionStock')]" doc:name="Expression"/>
+        <json:object-to-json-transformer mimeType="text/json" doc:name="Object to JSON"/>
+        <data-mapper:transform config-ref="JSON_To_Xml_AnulacionDeReserva_" doc:name="JSON To Xml&lt;AnulacionDeReserva&gt;"/>
+        <echo-component doc:name="Echo"/>
+        <ws:consumer config-ref="Web_Service_Consumer" operation="AnulacionDeReserva" doc:name="Web Service Consumer"/>
+    </flow>
 </mule>
