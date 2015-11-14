@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Gastón" created="Fri Nov 13 10:24:06 UYT 2015" description="JSON To Xml&lt;AnulacionDeReserva&gt;" guiVersion="3.4.4.P" id="1447457102489" licenseCode="Unlicensed" licenseType="Unknown" modified="Fri Nov 13 10:24:06 UYT 2015" modifiedBy="Gastón" name="JSON_To_Xml_AnulacionDeReserva_" revision="1.0" showComponentDetails="false">
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Gastón" created="Sat Nov 14 10:16:39 UYT 2015" description="JSON To Xml&lt;AnulacionDeReserva&gt;" guiVersion="3.4.4.P" id="1447509892479" licenseCode="Unlicensed" licenseType="Unknown" modified="Sat Nov 14 10:16:39 UYT 2015" modifiedBy="Gastón" name="JSON_To_Xml_AnulacionDeReserva_" preview-file="${Project_Home}/mappings/cancelacionStock.json" revision="1.0" showComponentDetails="false">
 <Global>
-<Metadata __index="0" __referenceCounter="1" __schemaType="{http://stock.com/}AnulacionDeReserva" __sourcePath="{http://stock.com/=ns0}/ns0:AnulacionDeReserva" _dataStructure="OBJECT" _id="__id" _type="Output" id="b51452b8-ba70-41ef-aa01-7e37ec690dd2">
+<Metadata __index="0" __referenceCounter="1" __schemaType="{http://stock.com/}AnulacionDeReserva" __sourcePath="{http://stock.com/=ns0}/ns0:AnulacionDeReserva" _dataStructure="OBJECT" _id="__id" _type="Output" id="9eed54ae-1a7e-4d3c-9484-deee230b8ba6">
 <Record fieldDelimiter="," name="AnulacionDeReserva" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
 <Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
 <Field __implementationClass="java.lang.Long" __index="0" __sourcePath="{http://stock.com/=ns0}/ns0:AnulacionDeReserva/arg0" containerType="SINGLE" label="arg0" name="arg0" type="long"/>
 </Record>
 </Metadata>
-<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/anulacionStock" _dataStructure="OBJECT" _id="__id" _type="Input" id="e4463377-0396-4202-b966-df939d9500b5">
-<Record fieldDelimiter="," name="anulacionStock" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="99daf110-6337-48c7-aeab-9cd5e3a018eb">
+<Record fieldDelimiter="," name="object" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
 <Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
-<Field __index="0" __sourcePath="{}/anulacionStock/idReserva" containerType="SINGLE" label="idReserva" name="idReserva" type="long"/>
+<Field __index="0" __sourcePath="{}/object/AnulacionDeReserva/arg0" containerType="SINGLE" label="arg0" name="arg0" type="integer"/>
 </Record>
 </Metadata>
 <Dictionary>
@@ -23,27 +23,33 @@
 <clover:element clover:name="ns0:AnulacionDeReserva" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" xmlns:ns0="http://stock.com/" clover:inPort="0">
   <arg0>$0.arg0</arg0>
 </clover:element>]]></attr>
+<attr name="__typeName"><![CDATA[__default__]]></attr>
 <attr name="_data_format"><![CDATA[XML]]></attr>
 <attr name="__metadata"><![CDATA[true]]></attr>
+<attr name="__operationName"><![CDATA[AnulacionDeReserva]]></attr>
+<attr name="__connectorName"><![CDATA[Web_Service_Consumer]]></attr>
 </Node>
-<Node enabled="enabled" guiName="Foreach 'anulacionStock' -&gt; 'stoc:AnulacionDeReserva'" guiX="460" guiY="20" id="FOREACH_ANULACION_STOCK_NS0_ANULACION_DE_RESERVA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<Node enabled="enabled" guiName="Foreach 'object' -&gt; 'ns0:AnulacionDeReserva'" guiX="460" guiY="20" id="FOREACH_OBJECT_NS0_ANULACION_DE_RESERVA" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
 <attr name="melScript"><![CDATA[//MEL
 //START -> DO NOT REMOVE
 output.__id = input.__id;
 //END -> DO NOT REMOVE
+output.arg0 = input.arg0;
 ]]></attr>
 </Node>
 <Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="JSON READER" guiX="20" guiY="20" id="JSON_READER0" type="JSON_READER">
+<attr name="__isJsonSchema"><![CDATA[false]]></attr>
 <attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Context xpath="/root">
   <Context outPort="0" sequenceField="__id" xpath="object">
-    <Mapping cloverField="idReserva" trim="true" xpath="idReserva"/>
+    <Mapping cloverField="arg0" trim="true" xpath="AnulacionDeReserva/arg0"/>
   </Context>
 </Context>
 ]]></attr>
 <attr name="_data_format"><![CDATA[JSON]]></attr>
+<attr name="jsonSchemaURL"><![CDATA[./mappings/cancelacionStock.json]]></attr>
 </Node>
-<Edge debugMode="true" fromNode="FOREACH_ANULACION_STOCK_NS0_ANULACION_DE_RESERVA:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="b51452b8-ba70-41ef-aa01-7e37ec690dd2" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
-<Edge debugMode="true" fromNode="JSON_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="e4463377-0396-4202-b966-df939d9500b5" outPort="Port 0 (out)" toNode="FOREACH_ANULACION_STOCK_NS0_ANULACION_DE_RESERVA:0"/>
+<Edge debugMode="true" fromNode="FOREACH_OBJECT_NS0_ANULACION_DE_RESERVA:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="9eed54ae-1a7e-4d3c-9484-deee230b8ba6" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+<Edge debugMode="true" fromNode="JSON_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="99daf110-6337-48c7-aeab-9cd5e3a018eb" outPort="Port 0 (out)" toNode="FOREACH_OBJECT_NS0_ANULACION_DE_RESERVA:0"/>
 </Phase>
 </Graph>

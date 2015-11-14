@@ -61,7 +61,7 @@ public class GuardarCSV {
 	public String cancelarOrden(String payload){
 		JSONObject pedido = new JSONObject(payload).getJSONObject("anulacionEPuerto");
 		
-		String idReserva = pedido.getString("idReserva");
+		String idReserva = pedido.getString("arg0");
 		
 		String nombreArchivo = "C:\\Middleware\\testdir\\anular\\"+idReserva+".csv";
         String texto = "identificadorReserva\n";

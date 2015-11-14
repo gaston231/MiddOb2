@@ -63,10 +63,8 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
     </flow>
     <flow name="StockCancelacion">
         <jms:inbound-endpoint topic="CancelacionAmazonia" connector-ref="Active_MQ" doc:name="JMS"/>
-        <expression-filter expression="#[message.payload.contains('anulacionStock')]" doc:name="Expression"/>
-        <json:object-to-json-transformer mimeType="text/json" doc:name="Object to JSON"/>
+        <expression-filter expression="#[message.payload.contains('AnulacionDeReserva')]" doc:name="Expression"/>
         <data-mapper:transform config-ref="JSON_To_Xml_AnulacionDeReserva_" doc:name="JSON To Xml&lt;AnulacionDeReserva&gt;"/>
-        <echo-component doc:name="Echo"/>
         <ws:consumer config-ref="Web_Service_Consumer" operation="AnulacionDeReserva" doc:name="Web Service Consumer"/>
     </flow>
 </mule>
