@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Gastón" created="Sun Nov 15 10:04:16 UYT 2015" description="XML To XML" guiVersion="3.4.4.P" id="1447607083852" licenseCode="Unlicensed" licenseType="Unknown" modified="Sun Nov 15 10:04:16 UYT 2015" modifiedBy="Gastón" name="XML_To_XML_1XML_To_XML_2" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/com_EPuertoResponse" _dataStructure="OBJECT" _id="__id" _type="Input" id="cfd20de1-535a-4ca2-a436-ae4cb5122d61">
+<Record fieldDelimiter="," name="com_EPuertoResponse" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/com_EPuertoResponse/mensaje" containerType="SINGLE" label="mensaje" name="mensaje" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/ePuertoResponse" _dataStructure="OBJECT" _id="__id" _type="Output" id="3bd69e09-f8f1-4bf4-b4d4-cd22e73317fb">
+<Record fieldDelimiter="," name="ePuertoResponse" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/ePuertoResponse/mensaje" containerType="SINGLE" label="mensaje" name="mensaje" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node cacheInMemory="true" charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="XML WRITER" guiX="900" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER" xmlSchemaURL="http://localhost:8090/soap-esb/EPuerto?wsdl">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<ePuertoResponse xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <mensaje>$0.mensaje</mensaje>
+</ePuertoResponse>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'com_EPuertoResponse' -&gt; 'ePuertoResponse'" guiX="460" guiY="20" id="FOREACH_COM_EPUERTO_RESPONSE_E_PUERTO_RESPONSE" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.mensaje = input.mensaje;
+]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="XML READER" guiX="20" guiY="20" id="XML_READER0" type="XML_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath="/com_EPuertoResponse">
+  <Mapping cloverField="mensaje" trim="true" xpath="mensaje"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="FOREACH_COM_EPUERTO_RESPONSE_E_PUERTO_RESPONSE:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="3bd69e09-f8f1-4bf4-b4d4-cd22e73317fb" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+<Edge debugMode="true" fromNode="XML_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="cfd20de1-535a-4ca2-a436-ae4cb5122d61" outPort="Port 0 (out)" toNode="FOREACH_COM_EPUERTO_RESPONSE_E_PUERTO_RESPONSE:0"/>
+</Phase>
+</Graph>

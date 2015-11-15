@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:soap="http://cxf.apache.org/bindings/soap"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<jaxws:endpoint id="amazoniaservice" implementor="com.AmazoniaService"
+		wsdlLocation="wsdl/amazoniaservice.wsdl" address="/amazoniaservice">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+		</jaxws:features>
+		<jaxws:inInterceptors>
+    		<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+        		<constructor-arg>
+            		<map>
+                		<entry key="action" value="Signature"/>
+                		<entry key="signaturePropFile" value="server-crypto.properties"/>
+                		<entry key="passwordCallbackClass" value="com.seguridad.ServerPasswordCallback"/>
+           			</map>
+        		</constructor-arg>
+    		</bean>
+    		<bean class="org.apache.cxf.ws.security.wss4j.DefaultCryptoCoverageChecker"/>
+		</jaxws:inInterceptors>		
+	</jaxws:endpoint>
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://com/" elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0">
+<xs:element name="confirmarOrden" type="tns:confirmarOrden"/>
+<xs:element name="confirmarOrdenResponse" type="tns:confirmarOrdenResponse"/>
+<xs:element name="recibirPedido" type="tns:recibirPedido"/>
+<xs:element name="recibirPedidoResponse" type="tns:recibirPedidoResponse"/>
+<xs:complexType name="confirmarOrden">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:ePuertoConfirmacionRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoConfirmacionRequest">
+<xs:sequence>
+<xs:element name="codigoResultado" type="xs:int"/>
+<xs:element minOccurs="0" name="descripcion" type="xs:string"/>
+<xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+<xs:element minOccurs="0" name="idReserva" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="confirmarOrdenResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:ePuertoResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="mensaje" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="recibirPedido">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:ePuertoPedidoRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ePuertoPedidoRequest">
+<xs:sequence>
+<xs:element name="cantidad" type="xs:int"/>
+<xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+<xs:element name="idProducto" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="recibirPedidoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:ePuertoResponse"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

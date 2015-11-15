@@ -35,7 +35,7 @@
   </wsdl:binding>
   <wsdl:service name="RecepcionOrdenesService">
     <wsdl:port name="RecepcionOrdenesPort" binding="tns:RecepcionOrdenesServiceSoapBinding">
-      <soap:address location="http://localhost:8080/Amazonia/services/RecepcionOrdenesPort"/>
+      <soap:address location="http://localhost:8080/Amazonia/services"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

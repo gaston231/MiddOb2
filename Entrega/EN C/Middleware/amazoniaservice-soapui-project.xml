@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1600c670-3c70-49aa-a2f1-de8b89be2c42" activeEnvironment="Default" name="amazoniaservice" resourceRoot="" soapui-version="5.2.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="0d51015d-1b7d-4d97-a283-81166377763b" wsaVersion="NONE" name="AmazoniaServiceServiceSoapBinding" type="wsdl" bindingName="{http://com/}AmazoniaServiceServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/Amazonia/services/amazoniaservice?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/Amazonia/services/amazoniaservice?wsdl"><con:part><con:url>http://localhost:8080/Amazonia/services/amazoniaservice?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="AmazoniaServiceService" targetNamespace="http://com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+      <import namespace="http://com/" schemaLocation="http://localhost:8080/Amazonia/services/amazoniaservice?xsd=amazoniaservice_schema1.xsd"/>
+    </schema>
+  </wsdl:types>
+  <wsdl:message name="recepcionOrdenesResponse">
+    <wsdl:part element="tns:recepcionOrdenesResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="recepcionOrdenes">
+    <wsdl:part element="tns:recepcionOrdenes" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AmazoniaService">
+    <wsdl:operation name="recepcionOrdenes">
+      <wsdl:input message="tns:recepcionOrdenes" name="recepcionOrdenes"></wsdl:input>
+      <wsdl:output message="tns:recepcionOrdenesResponse" name="recepcionOrdenesResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AmazoniaServiceServiceSoapBinding" type="tns:AmazoniaService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="recepcionOrdenes">
+      <soap:operation soapAction="urn:RecepcionOrdenes" style="document"/>
+      <wsdl:input name="recepcionOrdenes">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="recepcionOrdenesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AmazoniaServiceService">
+    <wsdl:port binding="tns:AmazoniaServiceServiceSoapBinding" name="AmazoniaServicePort">
+      <soap:address location="http://localhost:8080/Amazonia/services/amazoniaservice"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:8080/Amazonia/services/amazoniaservice?xsd=amazoniaservice_schema1.xsd</con:url><con:content><![CDATA[<xs:schema elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://com/">
+  <xs:element name="recepcionOrdenes" type="tns:recepcionOrdenes"/>
+  <xs:element name="recepcionOrdenesResponse" type="tns:recepcionOrdenesResponse"/>
+  <xs:complexType name="recepcionOrdenes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:dataOrden"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="dataOrden">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="idCompra" type="xs:string"/>
+      <xs:element name="nroTarjeta" type="xs:long"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="productos" nillable="true" type="tns:dataProducto"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="dataProducto">
+    <xs:sequence>
+      <xs:element name="cantidad" type="xs:int"/>
+      <xs:element name="idProducto" type="xs:long"/>
+      <xs:element name="precio" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="recepcionOrdenesResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/Amazonia/services/amazoniaservice</con:endpoint></con:endpoints><con:operation id="eafe2731-8821-49c6-8ccf-8e3123e716c5" isOneWay="false" action="urn:RecepcionOrdenes" name="recepcionOrdenes" bindingOperationName="recepcionOrdenes" type="Request-Response" outputName="recepcionOrdenesResponse" inputName="recepcionOrdenes" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="273d8862-ee65-44e4-bc4e-2ae93963b1ec" name="Request 1" outgoingWss="MiddSecurity"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/Amazonia/services/amazoniaservice</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://com/">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <com:recepcionOrdenes>\r
+         <!--Optional:-->\r
+         <arg0>\r
+            <!--Optional:-->\r
+            <idCompra>123321</idCompra>\r
+            <nroTarjeta>1234</nroTarjeta>\r
+            <!--Zero or more repetitions:-->\r
+            <productos>\r
+               <cantidad>10</cantidad>\r
+               <idProducto>1</idProducto>\r
+               <precio>5</precio>\r
+            </productos>\r
+            <productos>
+               <cantidad>10</cantidad>
+               <idProducto>22</idProducto>
+               <precio>5</precio>
+            </productos>
+
+         </arg0>\r
+      </com:recepcionOrdenes>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:RecepcionOrdenes"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer><con:crypto><con:source>C:/Middleware/MIDDLEWARE_KEYS.ssl</con:source><con:password>middleware</con:password><con:type>KEYSTORE</con:type></con:crypto><con:outgoing><con:name>MiddSecurity</con:name><con:entry type="Signature" username="middleware" password="middleware"><con:configuration><crypto>MIDDLEWARE_KEYS.ssl</crypto><keyIdentifierType>2</keyIdentifierType><signatureAlgorithm/><signatureCanonicalization/><useSingleCert>true</useSingleCert><digestAlgorithm/><customTokenValueType/><customTokenId/></con:configuration></con:entry></con:outgoing></con:wssContainer><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

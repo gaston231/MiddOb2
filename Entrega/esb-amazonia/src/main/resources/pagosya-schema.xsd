@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://com/" elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0">
+<xs:element name="realizarPago" type="tns:realizarPago"/>
+<xs:element name="realizarPagoResponse" type="tns:realizarPagoResponse"/>
+<xs:complexType name="realizarPago">
+<xs:sequence>
+<xs:element name="PagosYaRequest" type="tns:pagosYaRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="pagosYaRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="fechaHora" type="xs:string"/>
+<xs:element name="idCompra" type="xs:long"/>
+<xs:element name="monto" type="xs:double"/>
+<xs:element minOccurs="0" name="nroTarjeta" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="realizarPagoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:pagosYaResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="pagosYaResponse">
+<xs:sequence>
+<xs:element name="idPago" type="xs:long"/>
+<xs:element minOccurs="0" name="mensaje" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

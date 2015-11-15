@@ -1,0 +1,61 @@
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="IAmazoniaPagosYaService" targetNamespace="http://com/">
+<wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://com/" elementFormDefault="unqualified" targetNamespace="http://com/" version="1.0">
+<xs:element name="realizarPago" type="tns:realizarPago"/>
+<xs:element name="realizarPagoResponse" type="tns:realizarPagoResponse"/>
+<xs:complexType name="realizarPago">
+<xs:sequence>
+<xs:element name="PagosYaRequest" type="tns:pagosYaRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="pagosYaRequest">
+<xs:sequence>
+<xs:element minOccurs="0" name="fechaHora" type="xs:string"/>
+<xs:element name="idCompra" type="xs:long"/>
+<xs:element name="monto" type="xs:double"/>
+<xs:element minOccurs="0" name="nroTarjeta" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="realizarPagoResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:pagosYaResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="pagosYaResponse">
+<xs:sequence>
+<xs:element name="idPago" type="xs:long"/>
+<xs:element minOccurs="0" name="mensaje" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+</wsdl:types>
+<wsdl:message name="realizarPago">
+<wsdl:part element="tns:realizarPago" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:message name="realizarPagoResponse">
+<wsdl:part element="tns:realizarPagoResponse" name="parameters"></wsdl:part>
+</wsdl:message>
+<wsdl:portType name="IAmazoniaPagosYa">
+<wsdl:operation name="realizarPago">
+<wsdl:input message="tns:realizarPago" name="realizarPago"></wsdl:input>
+<wsdl:output message="tns:realizarPagoResponse" name="realizarPagoResponse"></wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="IAmazoniaPagosYaServiceSoapBinding" type="tns:IAmazoniaPagosYa">
+<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="realizarPago">
+<soap:operation soapAction="" style="document"/>
+<wsdl:input name="realizarPago">
+<soap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="realizarPagoResponse">
+<soap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="IAmazoniaPagosYaService">
+<wsdl:port binding="tns:IAmazoniaPagosYaServiceSoapBinding" name="IAmazoniaPagosYaPort">
+<soap:address location="http://localhost:8081/esb-soap/PagosYa/pago"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

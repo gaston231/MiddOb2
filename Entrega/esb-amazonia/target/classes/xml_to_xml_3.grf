@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Gastón" created="Sun Nov 15 10:04:16 UYT 2015" description="XML To XML" guiVersion="3.4.4.P" id="1447623280410" licenseCode="Unlicensed" licenseType="Unknown" modified="Sun Nov 15 10:04:16 UYT 2015" modifiedBy="Gastón" name="XML_To_XML_1XML_To_XML_2XML_To_XML_3" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/PagosYa" _dataStructure="OBJECT" _id="__id" _type="Input" id="66f6a4cf-9d80-46c4-8e7f-998a10dd1075">
+<Record fieldDelimiter="," name="PagosYa" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/PagosYa/idPago" containerType="SINGLE" label="idPago" name="idPago" type="long"/>
+<Field __index="1" __sourcePath="{}/PagosYa/mensaje" containerType="SINGLE" label="mensaje" name="mensaje" type="string"/>
+</Record>
+</Metadata>
+<Metadata __filteredMetadata="false" __index="0" __referenceCounter="1" __schemaType="{http://com/}realizarPagoResponse" __sourcePath="{http://com/=ns0}/ns0:realizarPagoResponse" _dataStructure="OBJECT" _id="__id" _type="Output" id="bc0c10f4-9a59-4ab9-8fcc-0def7afa5759">
+<Record fieldDelimiter="," name="realizarPagoResponse" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __schemaType="{http://com/}pagosYaResponse" __sourcePath="{http://com/=ns0}/ns0:realizarPagoResponse/return/idPago" containerType="SINGLE" label="idPago" name="idPago" type="long"/>
+<Field __index="1" __schemaType="{http://com/}pagosYaResponse" __sourcePath="{http://com/=ns0}/ns0:realizarPagoResponse/return/mensaje" containerType="SINGLE" label="mensaje" name="mensaje" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node cacheInMemory="true" charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiName="XML WRITER" guiX="900" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER" xmlSchemaURL="./src/main/resources/pagosya-schema.xsd">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<clover:element clover:name="ns0:realizarPagoResponse" xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" xmlns:ns0="http://com/" clover:inPort="0">
+  <return>
+    <idPago>$0.idPago</idPago>
+    <mensaje>$0.mensaje</mensaje>
+  </return>
+</clover:element>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+<attr name="__rootGlobalElementName"><![CDATA[{http://com/}realizarPagoResponse]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'PagosYa' -&gt; 'ns0:realizarPagoResponse'" guiX="460" guiY="20" id="FOREACH_PAGOS_YA_NS0_REALIZAR_PAGO_RESPONSE" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.idPago = input.idPago;
+output.mensaje = input.mensaje;
+]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiName="XML READER" guiX="20" guiY="20" id="XML_READER0" type="XML_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath="/PagosYa">
+  <Mapping cloverField="idPago" trim="true" xpath="idPago"/>
+  <Mapping cloverField="mensaje" trim="true" xpath="mensaje"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="FOREACH_PAGOS_YA_NS0_REALIZAR_PAGO_RESPONSE:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="bc0c10f4-9a59-4ab9-8fcc-0def7afa5759" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+<Edge debugMode="true" fromNode="XML_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="66f6a4cf-9d80-46c4-8e7f-998a10dd1075" outPort="Port 0 (out)" toNode="FOREACH_PAGOS_YA_NS0_REALIZAR_PAGO_RESPONSE:0"/>
+</Phase>
+</Graph>
