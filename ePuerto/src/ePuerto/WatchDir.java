@@ -77,8 +77,8 @@ public class WatchDir {
 
     /**
      * Process all events for keys queued to the watcher
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws IOException 
+     * @throws InterruptedException 
      */
     void processEvents() throws IOException, InterruptedException {
         for (;;) {
@@ -111,53 +111,104 @@ public class WatchDir {
                 Path child = dir.resolve(name);
 
                 // print out event
-                System.out.format("%s: %s\n", event.kind().name(), child);
+               // System.out.format("%s: %s\n", event.kind().name(), child);
 
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
-
+                
                 if (kind == ENTRY_CREATE){
                 	if (dir.getFileName().toString().equals("recepcion")){
                 		//Thread.sleep(5000);
                 		System.out.println("\n La orden "+child.getFileName().toString()+" fue agregada...\n");
                 		//Files.copy(child, Paths.get(dir.getParent().toString()+"/confirmar/"+child.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-                	}
+                	} 
                 	else if (dir.getFileName().toString().equals("confirmar")) {
-                		File f = new File(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()).toString());
-						if (! f.exists()){
+
+                		//busco por prefijo todos los productos en recepcion y los muevo a procesados, guardando el idreserva
+                		 
+                		
+                		 String[] s = child.getFileName().toString().split("\\.")[0].split("-");
+                		 String numOrd=s[0];
+                		 String numRes=s[1];
+                		
+                		 
+                		 File d = new File(Paths.get(dir.getParent().toString()+"/recepcion/").toString());
+                		// System.out.print(d.toString());
+                		 File[] foundFiles = d.listFiles(new FilenameFilter() {
+                		     public boolean accept(File d, String name) {
+                		    	 return name.split("-")[0].equals(numOrd);
+                		     }
+                		 });
+                		 for (File file : foundFiles) {
+                			 System.out.println("\n La orden "+file.getName()+" esta siendo confirmada...\n");
+                			 Thread.sleep(1000);
+                			 Files.move(file.toPath(), Paths.get(dir.getParent().toString()+"/procesados/"+numRes+"-"+file.getName()), StandardCopyOption.REPLACE_EXISTING);
+                			
+                			//copy(file.toPath(), Paths.get(dir.getParent().toString()+"/procesados/"+numRes+"-"+file.getName()), StandardCopyOption.REPLACE_EXISTING);							
+ 													
+ 							//Files.delete(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()));
+ 							//Files.delete(file.toPath());
+                			 
+                			}    
+                		 
+                		 //*******************
+             /*   		File f = new File(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()).toString());
+						if (! f.exists()){							
 							System.out.println("\n     !!!     La orden que quiere confirmar no existe     !!!     \n");}
 						else{
 							System.out.println("\n La orden "+child.getFileName().toString()+" esta siendo confirmada...\n");
 							Thread.sleep(5000);
-// cambiar el copy delete x un move
-							Files.copy(child, Paths.get(dir.getParent().toString()+"/procesados/"+child.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-							System.out.println("\n La orden "+child.getFileName().toString()+" fue procesada ...\n");
+
+							Files.copy(child, Paths.get(dir.getParent().toString()+"/procesados/"+child.getFileName()), StandardCopyOption.REPLACE_EXISTING);							
+							System.out.println("\n La orden "+child.getFileName().toString()+" fue procesada ...\n");							
 							Files.delete(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()));
 							Files.delete(child);
-						}
+						}*/
 					}
                 	else if (dir.getFileName().toString().equals("anular")) {
-                		File f = new File(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()).toString());
-						if (! f.exists()){
-							System.out.println("\n     !!!     la orden que quiere anular no existe     !!!     \n");}
+                		
+                		String reserva = child.getFileName().toString().split("\\.")[0];
+                		
+                		                		
+                		 File d = new File(Paths.get(dir.getParent().toString()+"/procesados/").toString());
+                		// System.out.print(d.toString());
+                		 File[] foundFiles = d.listFiles(new FilenameFilter() {
+                		     public boolean accept(File d, String name) {                		    	 
+                		         return name.split("-")[0].equals(reserva);
+                		     }
+                		 });
+                		 for (File file : foundFiles) {
+                			 System.out.println("\n Eliminando la orden "+file.getName().toString()+"  ...\n");                			 
+                			 Thread.sleep(1000);
+                			 Files.delete(file.toPath());
+                			
+                			//copy(file.toPath(), Paths.get(dir.getParent().toString()+"/procesados/"+numRes+"-"+file.getName()), StandardCopyOption.REPLACE_EXISTING);							
+ 													
+ 							//Files.delete(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()));
+ 							//Files.delete(file.toPath());
+                			 
+                			}    
+                		
+						/*if (! f.exists()){							
+							
 						else{
 							System.out.println("\n La orden "+child.getFileName().toString()+" esta siendo anulada...\n");
 							Thread.sleep(5000);
 							Files.copy(child, Paths.get(dir.getParent().toString()+"/procesados/"+child.getFileName()), StandardCopyOption.REPLACE_EXISTING);
-							System.out.println("\n La orden "+child.getFileName().toString()+" fue procesada ...\n");
+							System.out.println("\n La orden "+child.getFileName().toString()+" fue procesada ...\n");							
 							Files.delete(Paths.get(dir.getParent().toString()+"/recepcion/"+child.getFileName()));
 							Files.delete(child);
-						}
+						}*/
 					}
                 }
-
+                
                 if (recursive && (kind == ENTRY_CREATE)) {
                     try {
                         if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
                             registerAll(child);
-                            System.out.println(child.toString());
+                           // System.out.println(child.toString());
                             //aca hago todo ?? ver como genero confirmacion
-
+                            
                             //recepcion
                             //confirmacion
                             //anulacion
